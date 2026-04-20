@@ -21,10 +21,6 @@ const AppLayout = () => {
           </Link>
 
           <div className="d-flex align-items-center gap-3">
-            <Link to="/notes" className={styles.navLink} title="Note">
-              <span className="material-symbols-outlined" style={{ fontSize: 22 }}>note_stack</span>
-              <span className={styles.navLinkLabel}>Note</span>
-            </Link>
             <Link to="/profile" className={styles.avatarLink} title="Profilo">
               {user?.photoURL ? (
                 <img src={user.photoURL} alt="" className={styles.avatar} referrerPolicy="no-referrer" />

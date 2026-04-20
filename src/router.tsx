@@ -1,5 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 import Home from './views/Home/Home';
+import Login from './views/Login/Login';
 import HomeAuth from './views/HomeAuth/HomeAuth';
 import CompleteProfile from './views/CompleteProfile/CompleteProfile';
 import Profile from './views/Profile/Profile';
@@ -8,6 +9,7 @@ import AppLayout from './components/AppLayout/AppLayout';
 
 export const router = createBrowserRouter([
   { path: '/', element: <Home /> },
+  { path: '/login', element: <Login /> },
   {
     element: <ProtectedRoute />,
     children: [
