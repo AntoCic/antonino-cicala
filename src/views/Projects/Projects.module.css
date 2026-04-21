@@ -1,0 +1,315 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&display=swap');
+
+.root {
+  --bg-0: #06101d;
+  --bg-1: #0a1f34;
+  --bg-2: #0f2d47;
+  --ink-0: #eef9ff;
+  --ink-1: #bad1e3;
+  --ink-2: #8ca8bf;
+  --line: rgba(255, 255, 255, 0.14);
+  --cyan: #0ac9ff;
+  --green: #0ae448;
+  --panel: rgba(8, 24, 38, 0.72);
+  --gradient-text: linear-gradient(140deg, #f6fdff 8%, #84f7b1 42%, #61e0ff 100%);
+  --card-border-idle: rgba(255, 255, 255, 0.10);
+  --card-border-hover: rgba(10, 201, 255, 0.45);
+
+  min-height: 100vh;
+  color: var(--ink-0);
+  font-family: 'Inter', sans-serif;
+  background:
+    radial-gradient(900px 540px at -14% -12%, rgba(10, 228, 72, 0.14), rgba(10, 228, 72, 0) 62%),
+    radial-gradient(1020px 600px at 108% 0%, rgba(10, 201, 255, 0.14), rgba(10, 201, 255, 0) 62%),
+    linear-gradient(160deg, var(--bg-0), var(--bg-1) 52%, var(--bg-2));
+  overflow-x: clip;
+}
+
+.root :global(.material-symbols-outlined) {
+  font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+  line-height: 1;
+}
+
+/* ── Nav ── */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--line);
+  backdrop-filter: blur(14px);
+  background: linear-gradient(180deg, rgba(6, 16, 29, 0.92), rgba(6, 16, 29, 0.72));
+}
+
+.navInner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.backBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--ink-1);
+  text-decoration: none;
+  padding: 0.35rem 0.75rem;
+  border-radius: 8px;
+  transition: color 0.2s ease, background 0.2s ease;
+}
+
+.backBtn:hover {
+  color: var(--ink-0);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.backBtn .material-symbols-outlined {
+  font-size: 1.1rem;
+}
+
+.navTitle {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--ink-1);
+}
+
+/* ── Content ── */
+.content {
+  padding-top: clamp(3rem, 6vw, 5rem);
+  padding-bottom: clamp(4rem, 8vw, 6rem);
+}
+
+.pageHeader {
+  text-align: center;
+  margin-bottom: 3.5rem;
+}
+
+.sectionLabel {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--cyan);
+  margin: 0 0 0.5rem;
+}
+
+.sectionTitle {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(2rem, 5vw, 3.4rem);
+  font-weight: 700;
+  background: var(--gradient-text);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0 0 0.75rem;
+}
+
+.sectionSub {
+  font-size: 1rem;
+  color: var(--ink-2);
+  max-width: 480px;
+  margin: 0 auto 1.75rem;
+  line-height: 1.6;
+}
+
+/* ── Filters ── */
+.filters {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.filterBtn {
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--ink-1);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.38rem 1rem;
+  cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+  font-family: inherit;
+}
+
+.filterBtn:hover {
+  color: var(--ink-0);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.filterActive {
+  color: var(--cyan) !important;
+  border-color: rgba(10, 201, 255, 0.45) !important;
+  background: rgba(10, 201, 255, 0.08) !important;
+}
+
+/* ── Cards ── */
+.card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border-radius: 18px;
+  border: 1px solid var(--card-border-idle);
+  background: linear-gradient(165deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02)), var(--panel);
+  backdrop-filter: blur(10px);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  position: relative;
+}
+
+.cardPrincipale {
+  border-color: rgba(10, 201, 255, 0.22);
+  background: linear-gradient(165deg, rgba(10, 201, 255, 0.07), rgba(10, 228, 72, 0.04), rgba(255, 255, 255, 0.02)), var(--panel);
+}
+
+.cardIniziali {
+  opacity: 0.72;
+}
+
+.cardIniziali:hover {
+  opacity: 1;
+}
+
+.badgePrincipale {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: linear-gradient(135deg, rgba(10, 201, 255, 0.2), rgba(10, 228, 72, 0.15));
+  border: 1px solid rgba(10, 201, 255, 0.35);
+  color: var(--cyan);
+  border-radius: 999px;
+  padding: 0.2rem 0.55rem;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  border-color: var(--card-border-hover);
+  box-shadow: 0 0 0 1px var(--card-border-hover), 0 24px 52px rgba(10, 201, 255, 0.12);
+}
+
+.cardImg {
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: var(--bg-2);
+}
+
+.cardImg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.card:hover .cardImg img {
+  transform: scale(1.04);
+}
+
+.cardBody {
+  flex: 1;
+  padding: 1.25rem 1.4rem 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.techRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.techTag {
+  font-size: 0.66rem;
+  font-weight: 500;
+  border-radius: 999px;
+  border: 1px solid rgba(10, 201, 255, 0.25);
+  color: var(--cyan);
+  padding: 0.2rem 0.6rem;
+  background: rgba(10, 201, 255, 0.06);
+}
+
+.cardTitle {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--ink-0);
+  margin: 0;
+}
+
+.cardDesc {
+  font-size: 0.9rem;
+  color: var(--ink-2);
+  line-height: 1.6;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.cardFooter {
+  display: flex;
+  gap: 1.2rem;
+  padding: 1rem 1.4rem 1.4rem;
+  border-top: 1px solid var(--line);
+  margin-top: auto;
+}
+
+.cardLink {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--ink-1);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.cardLink:hover {
+  color: var(--cyan);
+}
+
+.cardLink .material-symbols-outlined {
+  font-size: 0.95rem;
+}
+
+/* ── Footer ── */
+.footer {
+  padding: 1.5rem 0;
+  border-top: 1px solid var(--line);
+}
+
+.footerText {
+  font-size: 0.82rem;
+  color: var(--ink-2);
+  margin: 0;
+  text-align: center;
+}
+
+.footerSep {
+  margin: 0 0.5rem;
+  opacity: 0.5;
+}
+
+.footerLink {
+  color: var(--cyan);
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.footerLink:hover {
+  opacity: 0.8;
+}

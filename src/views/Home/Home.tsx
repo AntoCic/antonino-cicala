@@ -1,260 +1,163 @@
-import { useEffect, useLayoutEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLayoutEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { useAuth } from '../../db/auth/useAuth';
-import { BtnGoogleLogin } from '../../components/BtnGoogleLogin/BtnGoogleLogin';
+import HeroSection from './cmp/HeroSection';
+import AiChatSection from './cmp/AiChatSection';
+import SkillsSection from './cmp/SkillsSection';
+import ProjectsSection from './cmp/ProjectsSection';
+import ContactSection from './cmp/ContactSection';
 import styles from './Home.module.css';
 
-const features = [
-  {
-    icon: 'task_alt',
-    title: 'Task Board',
-    text: 'Kanban board con colonne Todo, In Progress, Done e Blocked. Crea, modifica e sposta i task con drag & drop.',
-    badge: 'Disponibile',
-  },
-  {
-    icon: 'notifications_active',
-    title: 'Notifiche Push',
-    text: 'Ogni progetto genera una API key. I tuoi progetti esterni la usano per inviare notifiche di errore, warning, log o preview link direttamente qui.',
-    badge: 'Coming soon',
-  },
-  {
-    icon: 'code',
-    title: 'Integrazione GitHub',
-    text: 'Collega un repository GitHub al progetto per ricevere aggiornamenti su commit, PR e deployment direttamente nella dashboard.',
-    badge: 'Coming soon',
-  },
-];
+gsap.registerPlugin(ScrollTrigger);
 
-const steps = [
-  { title: 'Crea un progetto', text: 'Aggiungi un nuovo progetto con nome e descrizione. Ottieni una API key unica.' },
-  { title: 'Invita il team', text: 'Aggiungi membri via email. Ogni progetto e privato e accessibile solo ai suoi membri.' },
-  { title: 'Gestisci le task', text: 'Usa la board kanban per organizzare il lavoro. Sposta i task tra le colonne con drag & drop.' },
-  { title: 'Ricevi notifiche', text: 'Configura i tuoi progetti esterni per inviare notifiche a cortexCic via API key.' },
-];
-
-const Home = () => {
+export default function Home() {
   const rootRef = useRef<HTMLDivElement>(null);
-  const { user, loading } = useAuth();
-  const navigate = useNavigate();
+  const overlayRef = useRef<HTMLDivElement>(null);
+  const [navOpen, setNavOpen] = useState(false);
 
-  useEffect(() => {
-    if (!loading && user) navigate('/home', { replace: true });
-  }, [user, loading, navigate]);
+  const scrollTo = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+    setNavOpen(false);
+  };
 
   useLayoutEffect(() => {
-    if (!rootRef.current) return;
-
-    gsap.registerPlugin(ScrollTrigger);
-
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+    if (prefersReducedMotion) {
+      gsap.set(overlayRef.current, { autoAlpha: 0 });
+      return;
+    }
+
     const ctx = gsap.context(() => {
-      if (prefersReducedMotion) {
-        gsap.set('[data-intro-overlay]', { autoAlpha: 0, display: 'none' });
-        return;
-      }
+      const tl = gsap.timeline();
 
-      const introTimeline = gsap.timeline();
-
-      introTimeline
-        .from('[data-intro-line]', {
-          yPercent: 120,
-          opacity: 0,
-          duration: 0.82,
-          stagger: 0.12,
-          ease: 'power3.out',
-        })
-        .from(
-          '[data-intro-sub]',
-          {
-            y: 24,
-            opacity: 0,
-            duration: 0.58,
-            ease: 'power2.out',
-          },
-          '-=0.35',
+      tl.fromTo(
+        '[data-intro-lens]',
+        { scale: 0.2, opacity: 0.6 },
+        { scale: 3.5, opacity: 0, duration: 1.1, ease: 'power2.out' },
+        0,
+      )
+        .to(
+          overlayRef.current,
+          { autoAlpha: 0, duration: 0.65, ease: 'power2.inOut' },
+          0.85,
         )
-        .to('[data-intro-overlay]', {
-          autoAlpha: 0,
-          duration: 0.68,
-          delay: 0.24,
-          ease: 'power2.inOut',
-        })
         .from(
           '[data-hero-reveal]',
-          {
-            y: 34,
-            opacity: 0,
-            duration: 0.66,
-            stagger: 0.1,
-            ease: 'power2.out',
-          },
-          '-=0.2',
+          { y: 30, opacity: 0, duration: 0.6, stagger: 0.09, ease: 'power2.out' },
+          1.1,
         );
 
-      gsap.utils.toArray<HTMLElement>('[data-reveal-card]').forEach((element) => {
-        gsap.from(element, {
-          y: 46,
-          opacity: 0,
-          duration: 0.76,
-          ease: 'power2.out',
-          scrollTrigger: {
-            trigger: element,
-            start: 'top 84%',
-            once: true,
-          },
+      gsap.from('[data-skills-header]', {
+        y: 40, opacity: 0, duration: 0.7, ease: 'power2.out',
+        scrollTrigger: { trigger: '[data-skills-header]', start: 'top 82%', once: true },
+      });
+
+      gsap.utils.toArray<HTMLElement>('[data-skills-category]').forEach((el) => {
+        gsap.from(el, {
+          y: 30, opacity: 0, duration: 0.6, ease: 'power2.out',
+          scrollTrigger: { trigger: el, start: 'top 85%', once: true },
         });
+      });
+
+      gsap.utils.toArray<HTMLElement>('[data-skills-row]').forEach((row) => {
+        gsap.from(row.querySelectorAll('[data-skill-chip]'), {
+          scale: 0.82, opacity: 0, duration: 0.45,
+          stagger: { each: 0.045, from: 'start' },
+          ease: 'back.out(1.4)',
+          scrollTrigger: { trigger: row, start: 'top 88%', once: true },
+        });
+      });
+
+      gsap.from('[data-contact-content]', {
+        y: 50, opacity: 0, duration: 0.8, ease: 'power2.out',
+        scrollTrigger: { trigger: '[data-contact-content]', start: 'top 80%', once: true },
+      });
+
+      gsap.from('[data-contact-link]', {
+        scale: 0.8, opacity: 0, duration: 0.5, stagger: 0.08, ease: 'back.out(1.5)',
+        scrollTrigger: { trigger: '[data-contact-link]', start: 'top 88%', once: true },
       });
     }, rootRef);
 
-    return () => {
-      ctx.revert();
-    };
+    return () => ctx.revert();
   }, []);
 
   return (
-    <div className={styles.root} ref={rootRef}>
-      <div className={styles.introOverlay} data-intro-overlay aria-hidden="true">
-        <p className={styles.introKicker}>cortexCic</p>
-        <div className={styles.introTitle}>
-          <span className={styles.introLine} data-intro-line>
-            Welcome to your
-          </span>
-          <span className={styles.introLine} data-intro-line>
-            control center
-          </span>
-        </div>
-        <p className={styles.introSub} data-intro-sub>
-          Una sola dashboard per task, team e notifiche real-time.
-        </p>
+    <div ref={rootRef} className={styles.root}>
+      {/* Intro overlay */}
+      <div ref={overlayRef} className={styles.overlay} aria-hidden="true">
+        <div data-intro-lens className={styles.overlayLens} />
       </div>
 
+      {/* Navbar */}
       <nav className={styles.nav}>
-        <div className="container">
-          <div className="d-flex align-items-center justify-content-between gap-3">
-            <span className={styles.brand} data-hero-reveal>
-              <span className={styles.logo}>⬡</span>
-              cortexCic
+        <div className={`container ${styles.navInner}`}>
+          <button
+            className={styles.navBrand}
+            onClick={() => scrollTo('hero')}
+            aria-label="Torna su"
+          >
+            <span className={styles.navDot} />
+            Antonino Cicala
+          </button>
+
+          <button
+            className={styles.navToggle}
+            onClick={() => setNavOpen((v) => !v)}
+            aria-label="Menu"
+            aria-expanded={navOpen}
+          >
+            <span className="material-symbols-outlined">
+              {navOpen ? 'close' : 'menu'}
             </span>
-            <div data-hero-reveal>
-              <BtnGoogleLogin />
-            </div>
-          </div>
+          </button>
+
+          <ul className={`${styles.navLinks} ${navOpen ? styles.navLinksOpen : ''}`}>
+            <li><button onClick={() => scrollTo('skills')}>Skills</button></li>
+            <li><button onClick={() => scrollTo('projects')}>Progetti</button></li>
+            <li><button onClick={() => scrollTo('contact')}>Contatti</button></li>
+            <li>
+              <a
+                href="/Antonino.Cicala.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.navCv}
+              >
+                <span className="material-symbols-outlined" style={{ fontSize: '0.9rem' }}>download</span>
+                CV
+              </a>
+            </li>
+          </ul>
         </div>
       </nav>
 
-      <main>
-        <section className={styles.hero}>
-          <div className="container">
-            <div className="row g-4 align-items-end">
-              <div className="col-12 col-lg-7">
-                <p className={styles.heroTag} data-hero-reveal>
-                  Hub per le tue app
-                </p>
-                <h1 className={styles.heroTitle} data-hero-reveal>
-                  Il centro di controllo AA per <span>tutti i tuoi progetti web</span>
-                </h1>
-                <p className={styles.heroSub} data-hero-reveal>
-                  Organizza il lavoro su board kanban, invita il team e ricevi notifiche dai tuoi servizi esterni,
-                  tutto da una sola interfaccia.
-                </p>
-                <div className={styles.heroActions} data-hero-reveal>
-                  <BtnGoogleLogin />
-                </div>
-              </div>
-
-              <div className="col-12 col-lg-5">
-                <div className={styles.statGrid}>
-                  <article className={styles.statCard} data-hero-reveal>
-                    <span className={`material-symbols-outlined ${styles.statIcon}`}>space_dashboard</span>
-                    <h3>Vista unica</h3>
-                    <p>Ogni progetto vive nello stesso hub con accessi separati e ruoli chiari.</p>
-                  </article>
-                  <article className={styles.statCard} data-hero-reveal>
-                    <span className={`material-symbols-outlined ${styles.statIcon}`}>swap_vert</span>
-                    <h3>Flow veloce</h3>
-                    <p>Sposta task in drag and drop e visualizza subito lo stato del team.</p>
-                  </article>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className={styles.features}>
-          <div className="container">
-            <div className="row mb-4">
-              <div className="col-12 col-md-8">
-                <p className={styles.sectionLabel} data-reveal-card>
-                  Funzionalita
-                </p>
-                <h2 className={styles.sectionTitle} data-reveal-card>
-                  Tieni operativo il tuo ecosistema
-                </h2>
-                <p className={styles.sectionSub} data-reveal-card>
-                  Da task management a notifiche real-time, cortexCic cresce insieme ai tuoi prodotti.
-                </p>
-              </div>
-            </div>
-            <div className="row g-3">
-              {features.map((feature) => (
-                <div key={feature.title} className="col-12 col-md-4" data-reveal-card>
-                  <article className={styles.featureCard}>
-                    <div className={styles.featureIcon}>
-                      <span className="material-symbols-outlined">{feature.icon}</span>
-                    </div>
-                    <h3 className={styles.featureTitle}>{feature.title}</h3>
-                    <p className={styles.featureText}>{feature.text}</p>
-                    <span className={styles.featureBadge}>{feature.badge}</span>
-                  </article>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className={styles.howItWorks}>
-          <div className="container">
-            <div className="row mb-4">
-              <div className="col-12 col-md-8">
-                <p className={styles.sectionLabel} data-reveal-card>
-                  Come funziona
-                </p>
-                <h2 className={styles.sectionTitle} data-reveal-card>
-                  Parti in pochi minuti
-                </h2>
-              </div>
-            </div>
-            <div className="row g-4">
-              {steps.map((step, index) => (
-                <div key={step.title} className="col-12 col-sm-6 col-md-3" data-reveal-card>
-                  <article className={styles.stepCard}>
-                    <div className={styles.stepNum}>{index + 1}</div>
-                    <h3 className={styles.stepTitle}>{step.title}</h3>
-                    <p className={styles.stepText}>{step.text}</p>
-                  </article>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className={styles.cta} data-reveal-card>
-          <div className="container">
-            <h2 className={styles.ctaTitle}>Pronto a partire?</h2>
-            <p className={styles.ctaSub}>Accedi con Google e crea il tuo primo progetto in un clic.</p>
-            <BtnGoogleLogin />
-          </div>
-        </section>
-      </main>
+      <HeroSection />
+      <AiChatSection />
+      <SkillsSection />
+      <ProjectsSection />
+      <ContactSection />
 
       <footer className={styles.footer}>
-        <div className="container">cortexCic - {new Date().getFullYear()}</div>
+        <div className={`container ${styles.footerInner}`}>
+          <p className={styles.footerText}>
+            © {new Date().getFullYear()} Antonino Cicala — Full Stack Developer
+          </p>
+          <div className={styles.footerLinks}>
+            <a href="mailto:anto.cic.127@gmail.com" aria-label="Email">
+              <img src="/img/contact_ico/mail.svg" alt="Email" width={18} height={18} />
+            </a>
+            <a href="https://linkedin.com/in/Antonino-Cicala" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+              <img src="/img/contact_ico/linkedin.svg" alt="LinkedIn" width={18} height={18} />
+            </a>
+            <a href="https://github.com/AntoCic" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+              <img src="/img/contact_ico/github.svg" alt="GitHub" width={18} height={18} />
+            </a>
+            <Link to="/experiences" className={styles.footerExpDot} aria-label="Esperienze lavorative" title="Esperienze lavorative" />
+          </div>
+        </div>
       </footer>
     </div>
   );
-};
-
-export default Home;
+}

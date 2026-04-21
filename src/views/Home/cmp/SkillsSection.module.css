@@ -1,0 +1,232 @@
+/* ── accent palette ── */
+.section {
+  --accent-cyan:   #0ac9ff;
+  --accent-green:  #0ae448;
+  --accent-amber:  #f59e0b;
+  --accent-violet: #a78bfa;
+
+  padding: var(--section-pad) 0;
+  background: var(--bg-0);
+}
+
+/* ── Header ── */
+.header {
+  text-align: center;
+  margin-bottom: clamp(2.5rem, 5vw, 4rem);
+}
+
+.sectionLabel {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--cyan);
+  margin: 0 0 0.5rem;
+}
+
+.sectionTitle {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  font-weight: 700;
+  color: var(--ink-0);
+  margin: 0 0 1rem;
+}
+
+.sectionSub {
+  font-size: 1rem;
+  color: var(--ink-2);
+  max-width: 500px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* ── 2×2 grid ── */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+/* ── Category card ── */
+.card {
+  border-radius: 22px;
+  border: 1px solid var(--card-border-idle);
+  background: linear-gradient(160deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%), var(--panel);
+  backdrop-filter: blur(12px);
+  padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* top accent bar */
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 3px;
+  border-radius: 22px 22px 0 0;
+}
+
+/* per-accent colors */
+.card--cyan::before   { background: linear-gradient(90deg, var(--accent-cyan), transparent 80%); }
+.card--green::before  { background: linear-gradient(90deg, var(--accent-green), transparent 80%); }
+.card--amber::before  { background: linear-gradient(90deg, var(--accent-amber), transparent 80%); }
+.card--violet::before { background: linear-gradient(90deg, var(--accent-violet), #7c3aed, transparent 80%); }
+
+.card--cyan:hover   { border-color: rgba(10,201,255,0.35);  box-shadow: 0 0 40px rgba(10,201,255,0.06); }
+.card--green:hover  { border-color: rgba(10,228,72,0.35);   box-shadow: 0 0 40px rgba(10,228,72,0.06); }
+.card--amber:hover  { border-color: rgba(245,158,11,0.35);  box-shadow: 0 0 40px rgba(245,158,11,0.06); }
+.card--violet:hover { border-color: rgba(167,139,250,0.35); box-shadow: 0 0 40px rgba(167,139,250,0.06); }
+
+/* AI card: subtle animated gradient bg */
+.card--violet {
+  background:
+    linear-gradient(135deg, rgba(167,139,250,0.06) 0%, rgba(124,58,237,0.04) 50%, rgba(255,255,255,0.01) 100%),
+    var(--panel);
+}
+
+/* ── Card header ── */
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-bottom: 1.4rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.cardIcon {
+  font-size: 1.15rem;
+}
+
+.card--cyan   .cardIcon { color: var(--accent-cyan);   }
+.card--green  .cardIcon { color: var(--accent-green);  }
+.card--amber  .cardIcon { color: var(--accent-amber);  }
+.card--violet .cardIcon { color: var(--accent-violet); }
+
+.cardLabel {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.card--cyan   .cardLabel { color: var(--accent-cyan);   }
+.card--green  .cardLabel { color: var(--accent-green);  }
+.card--amber  .cardLabel { color: var(--accent-amber);  }
+.card--violet .cardLabel { color: var(--accent-violet); }
+
+.newBadge {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent-violet);
+  background: rgba(167,139,250,0.12);
+  border: 1px solid rgba(167,139,250,0.3);
+  border-radius: 999px;
+  padding: 0.15rem 0.5rem;
+}
+
+.cardCount {
+  margin-left: auto;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--ink-2);
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.1rem 0.55rem;
+  min-width: 24px;
+  text-align: center;
+}
+
+/* ── Chip grid ── */
+.chipGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+
+/* ── Single chip ── */
+.chip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.45rem;
+  width: 74px;
+  margin: 0;
+  cursor: default;
+  transition: transform 0.22s ease;
+}
+
+.chip:hover {
+  transform: translateY(-5px);
+}
+
+.chipImgWrap {
+  width: 54px;
+  height: 54px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,0.04);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;
+  overflow: hidden;
+}
+
+.card--cyan   .chip:hover .chipImgWrap { border-color: var(--accent-cyan);   box-shadow: 0 6px 20px rgba(10,201,255,0.22);  background: rgba(10,201,255,0.08);  }
+.card--green  .chip:hover .chipImgWrap { border-color: var(--accent-green);  box-shadow: 0 6px 20px rgba(10,228,72,0.22);   background: rgba(10,228,72,0.08);   }
+.card--amber  .chip:hover .chipImgWrap { border-color: var(--accent-amber);  box-shadow: 0 6px 20px rgba(245,158,11,0.22);  background: rgba(245,158,11,0.08);  }
+.card--violet .chip:hover .chipImgWrap { border-color: var(--accent-violet); box-shadow: 0 6px 20px rgba(167,139,250,0.25); background: rgba(167,139,250,0.1);  }
+
+.chipImg {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+  border-radius: 4px;
+}
+
+.chipName {
+  font-size: 0.6rem;
+  font-weight: 500;
+  color: var(--ink-2);
+  text-align: center;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 72px;
+  transition: color 0.2s ease;
+}
+
+.chip:hover .chipName {
+  color: var(--ink-1);
+}
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .chip {
+    width: 64px;
+  }
+
+  .chipImgWrap {
+    width: 48px;
+    height: 48px;
+  }
+
+  .chipImg {
+    width: 28px;
+    height: 28px;
+  }
+}

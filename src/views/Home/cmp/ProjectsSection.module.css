@@ -1,0 +1,302 @@
+.section {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: linear-gradient(180deg, var(--bg-0) 0%, var(--bg-1) 100%);
+  padding-top: clamp(3rem, 6vw, 5rem);
+}
+
+/* ── Header ── */
+.header {
+  flex-shrink: 0;
+  text-align: center;
+  margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.sectionLabel {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--cyan);
+  margin: 0 0 0.5rem;
+}
+
+.sectionTitle {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  font-weight: 700;
+  color: var(--ink-0);
+  margin: 0 0 0.75rem;
+}
+
+.sectionSub {
+  font-size: 1rem;
+  color: var(--ink-2);
+  max-width: 480px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* ── Horizontal track ── */
+.trackOuter {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.track {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 1.5rem;
+  padding: 0.5rem 8vw 2rem;
+  align-items: stretch;
+  will-change: transform;
+}
+
+/* ── Project card ── */
+.card {
+  width: clamp(280px, 36vw, 400px);
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  border-radius: 20px;
+  border: 1px solid rgba(10, 201, 255, 0.18);
+  background: linear-gradient(165deg, rgba(10, 201, 255, 0.07), rgba(10, 228, 72, 0.04), rgba(255, 255, 255, 0.02)), var(--panel);
+  backdrop-filter: blur(10px);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  position: relative;
+  text-decoration: none;
+}
+
+.card:hover {
+  transform: translateY(-8px);
+  border-color: var(--card-border-hover);
+  box-shadow: 0 0 0 1px var(--card-border-hover), 0 28px 56px rgba(10, 201, 255, 0.14);
+}
+
+.badgePrincipale {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: linear-gradient(135deg, rgba(10, 201, 255, 0.2), rgba(10, 228, 72, 0.15));
+  border: 1px solid rgba(10, 201, 255, 0.35);
+  color: var(--cyan);
+  border-radius: 999px;
+  padding: 0.2rem 0.55rem;
+}
+
+.cardImg {
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: var(--bg-2);
+  flex-shrink: 0;
+}
+
+.cardImg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.card:hover .cardImg img {
+  transform: scale(1.05);
+}
+
+.cardBody {
+  flex: 1;
+  padding: 1.25rem 1.4rem 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.techRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.techTag {
+  font-size: 0.66rem;
+  font-weight: 500;
+  border-radius: 999px;
+  border: 1px solid rgba(10, 201, 255, 0.25);
+  color: var(--cyan);
+  padding: 0.2rem 0.6rem;
+  background: rgba(10, 201, 255, 0.06);
+}
+
+.cardTitle {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--ink-0);
+  margin: 0;
+}
+
+.cardDesc {
+  font-size: 0.88rem;
+  color: var(--ink-2);
+  line-height: 1.6;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.cardFooter {
+  display: flex;
+  gap: 1.2rem;
+  padding: 0.85rem 1.4rem 1.2rem;
+  border-top: 1px solid var(--line);
+  margin-top: auto;
+}
+
+.cardLink {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--ink-1);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.cardLink:hover {
+  color: var(--cyan);
+}
+
+.cardLink .material-symbols-outlined {
+  font-size: 0.95rem;
+}
+
+/* ── View all card ── */
+.cardViewAll {
+  background: linear-gradient(135deg, rgba(10, 201, 255, 0.06), rgba(10, 228, 72, 0.06), rgba(255, 255, 255, 0.02));
+  border: 1px solid rgba(10, 201, 255, 0.22);
+  cursor: pointer;
+  justify-content: center;
+  align-items: center;
+  overflow: visible;
+}
+
+.cardViewAll:hover {
+  border-color: var(--cyan);
+  background: linear-gradient(135deg, rgba(10, 201, 255, 0.12), rgba(10, 228, 72, 0.08));
+}
+
+.viewAllInner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  text-align: center;
+  padding: 2rem 1.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.viewAllGlow {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(circle at 50% 50%, rgba(10, 201, 255, 0.12), transparent 65%);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+
+.cardViewAll:hover .viewAllGlow {
+  opacity: 1;
+}
+
+.viewAllIcon {
+  font-size: 2.4rem;
+  color: var(--cyan);
+  opacity: 0.85;
+}
+
+.viewAllTitle {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--ink-0);
+  display: block;
+}
+
+.viewAllSub {
+  font-size: 0.88rem;
+  color: var(--ink-2);
+  margin: 0;
+}
+
+.viewAllArrow {
+  font-size: 1.3rem;
+  color: var(--cyan);
+  margin-top: 0.5rem;
+  transition: transform 0.25s ease;
+}
+
+.cardViewAll:hover .viewAllArrow {
+  transform: translateX(6px);
+}
+
+/* ── Reduced motion fallback ── */
+@media (prefers-reduced-motion: reduce) {
+  .section {
+    height: auto;
+    overflow: visible;
+  }
+
+  .trackOuter {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .track {
+    padding-bottom: 1rem;
+  }
+}
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+  .section {
+    height: auto;
+    overflow: visible;
+    padding-bottom: 3rem;
+  }
+
+  .trackOuter {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .trackOuter::-webkit-scrollbar {
+    display: none;
+  }
+
+  .track {
+    padding: 0.5rem 1.5rem 1rem;
+  }
+
+  .card {
+    width: clamp(260px, 78vw, 340px);
+  }
+}

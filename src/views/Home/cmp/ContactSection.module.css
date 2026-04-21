@@ -1,0 +1,238 @@
+.section {
+  padding: var(--section-pad) 0 calc(var(--section-pad) * 1.2);
+  background: linear-gradient(180deg, var(--bg-1) 0%, var(--bg-0) 100%);
+}
+
+.inner {
+  max-width: 680px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.sectionLabel {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--cyan);
+  margin: 0 0 0.5rem;
+}
+
+.title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(2rem, 5vw, 3.4rem);
+  font-weight: 700;
+  background: var(--gradient-text);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0 0 1rem;
+}
+
+.subtitle {
+  font-size: 1.05rem;
+  color: var(--ink-2);
+  line-height: 1.6;
+  margin: 0 0 2.5rem;
+}
+
+.linkRow {
+  display: flex;
+  justify-content: center;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+  margin-bottom: 2.5rem;
+}
+
+.iconLink {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.45rem;
+  width: 72px;
+  text-decoration: none;
+  transition: transform 0.2s ease;
+}
+
+.iconLink > img {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 1.5px solid var(--line);
+  background: var(--panel);
+  padding: 14px;
+  transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.iconLink:hover {
+  transform: scale(1.08);
+}
+
+.iconLink:hover > img {
+  border-color: var(--cyan);
+  background: rgba(10, 201, 255, 0.1);
+  box-shadow: 0 4px 16px rgba(10, 201, 255, 0.2);
+}
+
+.iconLinkLabel {
+  font-size: 0.7rem;
+  color: var(--ink-2);
+  font-weight: 500;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  color: var(--ink-2);
+  font-size: 0.82rem;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}
+
+.form {
+  text-align: left;
+}
+
+.input,
+.textarea {
+  width: 100%;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  color: var(--ink-0);
+  font-size: 0.95rem;
+  padding: 0.75rem 1rem;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  font-family: inherit;
+  resize: vertical;
+}
+
+.input::placeholder,
+.textarea::placeholder {
+  color: var(--ink-2);
+}
+
+.input:focus,
+.textarea:focus {
+  border-color: var(--cyan);
+  box-shadow: 0 0 0 3px rgba(10, 201, 255, 0.12);
+}
+
+.submitBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, var(--cyan), var(--green));
+  color: #06101d;
+  font-weight: 700;
+  font-size: 0.95rem;
+  border: none;
+  border-radius: 10px;
+  padding: 0.8rem 2rem;
+  cursor: pointer;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  font-family: inherit;
+}
+
+.submitBtn:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
+
+.submitBtn:active {
+  transform: translateY(0);
+}
+
+.submitBtn .material-symbols-outlined {
+  font-size: 1.1rem;
+}
+
+/* ── Explore section ── */
+.exploreRow {
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--line);
+}
+
+.exploreLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  margin: 0 0 1rem;
+}
+
+.exploreCards {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.exploreCard {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.2rem;
+  border-radius: 14px;
+  border: 1px solid var(--card-border-idle);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01));
+  text-decoration: none;
+  transition: border-color 0.25s ease, background 0.25s ease, transform 0.25s ease;
+  text-align: left;
+}
+
+.exploreCard:hover {
+  border-color: rgba(10, 201, 255, 0.35);
+  background: linear-gradient(135deg, rgba(10, 201, 255, 0.07), rgba(10, 228, 72, 0.04));
+  transform: translateX(4px);
+}
+
+.exploreIcon {
+  font-size: 1.5rem;
+  color: var(--cyan);
+  flex-shrink: 0;
+  opacity: 0.85;
+}
+
+.exploreCard > div {
+  flex: 1;
+}
+
+.exploreCardTitle {
+  display: block;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--ink-0);
+  margin-bottom: 0.15rem;
+}
+
+.exploreCardSub {
+  font-size: 0.78rem;
+  color: var(--ink-2);
+  margin: 0;
+}
+
+.exploreArrow {
+  font-size: 1.1rem;
+  color: var(--ink-2);
+  flex-shrink: 0;
+  transition: color 0.25s ease, transform 0.25s ease;
+}
+
+.exploreCard:hover .exploreArrow {
+  color: var(--cyan);
+  transform: translateX(4px);
+}
