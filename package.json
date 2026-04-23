@@ -13,7 +13,8 @@
     "preview": "vite preview",
     "emulator:save": "bash scripts/emulator-save.sh",
     "emulator:reset": "bash scripts/emulator-reset.sh",
-    "save": "npm run emulator:save"
+    "save": "npm run emulator:save",
+    "cic": "npx cic-index"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.11.2",

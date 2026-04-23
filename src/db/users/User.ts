@@ -1,5 +1,3 @@
-import type { Timestamp } from 'firebase/firestore';
-
 export interface UserProfile {
   uid: string;
   firstName: string;
@@ -7,8 +5,9 @@ export interface UserProfile {
   email: string | null;
   photoURL: string | null;
   fcmTokens: string[];
-  createdAt: Timestamp;
-  updatedAt: Timestamp;
+  permissions?: string[];
+  createdAt: string;
+  updatedAt: string;
 }
 
 export type UserProfileWrite = Omit<UserProfile, 'uid'>;

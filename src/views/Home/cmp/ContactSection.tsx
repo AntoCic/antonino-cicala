@@ -1,5 +1,6 @@
 import { useRef } from 'react';
 import { toast } from '../../../components/toast/toast';
+import { hubLog } from '../../../api/hubLog';
 import styles from './ContactSection.module.css';
 
 const contactLinks = [
@@ -14,16 +15,26 @@ export default function ContactSection() {
   const emailRef = useRef<HTMLInputElement>(null);
   const messageRef = useRef<HTMLTextAreaElement>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const name = nameRef.current?.value ?? '';
-    const email = emailRef.current?.value ?? '';
-    const message = messageRef.current?.value ?? '';
+    const name = nameRef.current?.value.trim() ?? '';
+    const email = emailRef.current?.value.trim() ?? '';
+    const message = messageRef.current?.value.trim() ?? '';
 
-    const subject = encodeURIComponent(`[Portfolio] Messaggio da ${name}`);
-    const body = encodeURIComponent(`Ciao Antonino,\n\n${message}\n\n---\nInviato da: ${name} (${email})`);
-    window.open(`mailto:anto.cic.127@gmail.com?subject=${subject}&body=${body}`, '_blank');
-    toast.success('Si aprirà il tuo client email con il messaggio pronto!');
+    const toastId = 'contact-send';
+    toast.loading('Invio in corso…', { id: toastId });
+    try {
+      await hubLog.info(`[Portfolio] Messaggio da ${name} (${email})`, {
+        payload: { name, email, message },
+        showPush: true,
+      });
+      toast.success('Messaggio inviato! Ti risponderò entro 24 ore.', { id: toastId });
+      if (nameRef.current) nameRef.current.value = '';
+      if (emailRef.current) emailRef.current.value = '';
+      if (messageRef.current) messageRef.current.value = '';
+    } catch {
+      toast.error('Invio fallito', { subtitle: 'Riprova o contattami via email.', id: toastId });
+    }
   };
 
   return (

@@ -1,3 +1,135 @@
 .root {
   padding: 2.5rem 0 4rem;
 }
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.75rem;
+  color: #212529;
+}
+
+.title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.content {
+  background: #fff;
+  border: 1px solid #dee2e6;
+  border-top: none;
+  border-radius: 0 0 12px 12px;
+  padding: 2rem;
+}
+
+.faqList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.faqItem {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+  align-items: flex-start;
+}
+
+.faqIndex {
+  flex-shrink: 0;
+  width: 1.75rem;
+  height: 1.75rem;
+  background: var(--bs-primary);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  margin-top: 2px;
+}
+
+.faqContent {
+  flex: 1;
+  min-width: 0;
+}
+
+.faqQuestion {
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 0.35rem;
+  color: #212529;
+}
+
+.faqAnswer {
+  color: #6c757d;
+  font-size: 0.82rem;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.faqActions {
+  display: flex;
+  gap: 0.35rem;
+  flex-shrink: 0;
+}
+
+/* Reserved message */
+.reservedBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 5rem 1rem;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.reservedTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+}
+
+.reservedText {
+  color: #6c757d;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+.reservedContacts {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.reservedLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+  background: #f8f9fa;
+  color: #212529;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.reservedLink:hover {
+  background: #e9ecef;
+  border-color: #adb5bd;
+  color: #212529;
+}

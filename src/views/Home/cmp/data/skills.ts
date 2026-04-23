@@ -35,7 +35,7 @@ export const skills: Skill[] = [
   { name: 'Git',         icon: 'git.svg',         category: 'Tools' },
   { name: 'GitHub',      icon: 'github.svg',      category: 'Tools' },
   { name: 'Vite',        icon: 'vite.svg',        category: 'Tools' },
-  { name: 'Docker',      icon: 'docker.jpg',      category: 'Tools' },
+  { name: 'Docker',      icon: 'docker.svg',      category: 'Tools' },
   { name: 'npm',         icon: 'npm.svg',         category: 'Tools' },
   { name: 'VS Code',     icon: 'vscode.svg',      category: 'Tools' },
   { name: 'Postman',     icon: 'postman.svg',     category: 'Tools' },

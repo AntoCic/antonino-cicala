@@ -6,6 +6,7 @@ import {
   arrayUnion,
   arrayRemove,
   serverTimestamp,
+  type Timestamp,
 } from 'firebase/firestore';
 import { db } from '../../components/firebase/firebase';
 import type { UserProfile } from './User';
@@ -17,7 +18,16 @@ function userDoc(uid: string) {
 export async function getUserProfile(uid: string): Promise<UserProfile | null> {
   const snap = await getDoc(userDoc(uid));
   if (!snap.exists()) return null;
-  return { uid: snap.id, ...(snap.data() as Omit<UserProfile, 'uid'>) };
+  const data = snap.data() as Omit<UserProfile, 'uid' | 'createdAt' | 'updatedAt'> & {
+    createdAt: Timestamp;
+    updatedAt: Timestamp;
+  };
+  return {
+    uid: snap.id,
+    ...data,
+    createdAt: data.createdAt?.toDate().toISOString() ?? '',
+    updatedAt: data.updatedAt?.toDate().toISOString() ?? '',
+  };
 }
 
 export async function createUserProfile(

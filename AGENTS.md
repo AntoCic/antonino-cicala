@@ -159,3 +159,15 @@ toast.dismiss('save-op');
 
 The `ToastOptions` type extends react-hot-toast's native options (`duration`, `position`, `style`, `icon`, `id`, etc.) with an additional `subtitle?: string` field.
 When `subtitle` is provided, the toast renders a two-line custom layout. All native options are available in TypeScript autocomplete.
+
+## Logging & Notifications
+
+For logging and error reporting use `hubLog` (cortexCic integration).
+
+- Prefer `hubLog.error()` for exceptions and production errors
+- Use `hubLog.warning()` for degraded-state situations
+- Use `hubLog.info()` for significant runtime events
+- Use `hubLog.deploy()` for deployment events
+
+Do not use `console.error` for production errors — route them through `hubLog`.
+Config: `VITE_CORTEX_API_KEY` + `VITE_CORTEX_BASE_URL` (frontend `.env`, `src/api/hubLog.ts`). Backend usa Firebase secrets `CORTEX_API_KEY` e `CORTEX_NOTIFY_URL` dichiarati in `functions/src/config/secret.ts` — mai env vars. Aggiungere nuovi secret con `npx cic-index`.

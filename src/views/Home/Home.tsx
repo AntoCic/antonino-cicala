@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState } from 'react';
+import { useLayoutEffect, useRef, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -7,6 +7,8 @@ import AiChatSection from './cmp/AiChatSection';
 import SkillsSection from './cmp/SkillsSection';
 import ProjectsSection from './cmp/ProjectsSection';
 import ContactSection from './cmp/ContactSection';
+import { getAppSettings } from '../../db/appSettings/appSettingsRepo';
+import { useAuth } from '../../db/auth/useAuth';
 import styles from './Home.module.css';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -15,6 +17,12 @@ export default function Home() {
   const rootRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const [navOpen, setNavOpen] = useState(false);
+  const [aiChatEnabled, setAiChatEnabled] = useState(false);
+  const { user } = useAuth();
+
+  useEffect(() => {
+    getAppSettings().then((s) => setAiChatEnabled(s?.aiChatEnabled ?? false));
+  }, []);
 
   const scrollTo = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
@@ -134,7 +142,7 @@ export default function Home() {
       </nav>
 
       <HeroSection />
-      <AiChatSection />
+      {aiChatEnabled && <AiChatSection />}
       <SkillsSection />
       <ProjectsSection />
       <ContactSection />
@@ -154,6 +162,9 @@ export default function Home() {
             <a href="https://github.com/AntoCic" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
               <img src="/img/contact_ico/github.svg" alt="GitHub" width={18} height={18} />
             </a>
+            <Link to={user ? '/home' : '/login'} aria-label="Admin">
+              <span className="material-symbols-outlined" style={{ fontSize: 18, display: 'block', color: '#fff' }}>lock</span>
+            </Link>
             <Link to="/experiences" className={styles.footerExpDot} aria-label="Esperienze lavorative" title="Esperienze lavorative" />
           </div>
         </div>

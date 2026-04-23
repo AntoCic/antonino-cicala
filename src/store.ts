@@ -1,11 +1,15 @@
-import { configureStore } from "@reduxjs/toolkit";
-import { useDispatch, useSelector } from "react-redux";
-import type { TypedUseSelectorHook } from "react-redux";
-import authReducer from "./db/auth/authSlice";
+import { configureStore } from '@reduxjs/toolkit';
+import { useDispatch, useSelector } from 'react-redux';
+import type { TypedUseSelectorHook } from 'react-redux';
+import authReducer from './db/auth/authSlice';
+import faqReducer from './db/faq/faqSlice';
+import appSettingsReducer from './db/appSettings/appSettingsSlice';
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
+    faq: faqReducer,
+    appSettings: appSettingsReducer,
   },
 });
 

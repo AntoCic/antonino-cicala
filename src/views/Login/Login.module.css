@@ -1,0 +1,38 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  gap: 1.5rem;
+  padding: 2rem;
+}
+
+.notice {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  text-align: center;
+  max-width: 320px;
+}
+
+.noticeIcon {
+  font-size: 2rem;
+  opacity: 0.4;
+}
+
+.noticeTitle {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--bs-secondary);
+  margin: 0;
+}
+
+.noticeText {
+  font-size: 0.8rem;
+  color: var(--bs-secondary);
+  opacity: 0.75;
+  margin: 0;
+  line-height: 1.5;
+}

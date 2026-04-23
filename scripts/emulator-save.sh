@@ -19,7 +19,7 @@ fi
 
 # Se il container è in esecuzione, forza l'export con il corretto project
 echo "Exporting data from running container..."
-docker compose exec firebase firebase emulators:export ./emulator-data --project demo-antonino-cicala --force
+docker compose exec firebase firebase emulators:export ./emulator-data --project antonino-cicala --force
 
 if [ $? -eq 0 ]; then
   echo "✅ State saved to emulator-data/"
