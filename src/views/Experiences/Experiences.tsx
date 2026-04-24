@@ -1,8 +1,10 @@
-import { useLayoutEffect, useRef } from 'react';
+import { useEffect, useLayoutEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { experiences } from '../Home/cmp/data/experiences';
+import { useAppDispatch, useAppSelector } from '../../store';
+import { getAllExperiences } from '../../db/experiences/experienceRepo';
+import { setExperiences, setExperienceLoading } from '../../db/experiences/experienceSlice';
 import styles from './Experiences.module.css';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -24,15 +26,24 @@ function formatDate(iso: string): string {
   return d.toLocaleDateString('it-IT', { month: 'short', year: 'numeric' });
 }
 
-function formatRange(start: string, end: string | null): string {
+function formatRange(start: string, end?: string): string {
   return `${formatDate(start)} → ${end ? formatDate(end) : 'Oggi'}`;
 }
 
 export default function Experiences() {
+  const dispatch = useAppDispatch();
+  const { experiences, loading } = useAppSelector((s) => s.experience);
   const rootRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if (experiences.length > 0) return;
+    dispatch(setExperienceLoading(true));
+    getAllExperiences().then((data) => dispatch(setExperiences(data)));
+  }, [dispatch, experiences.length]);
+
   useLayoutEffect(() => {
+    if (experiences.length === 0) return;
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReducedMotion) return;
 
@@ -66,7 +77,7 @@ export default function Experiences() {
     }, rootRef);
 
     return () => ctx.revert();
-  }, []);
+  }, [experiences.length]);
 
   const reversed = [...experiences].reverse();
 
@@ -92,45 +103,51 @@ export default function Experiences() {
             </p>
           </div>
 
-          <div className={styles.timeline}>
-            <div className={styles.timelineLine} data-timeline-line />
+          {loading ? (
+            <div className="text-center py-5">
+              <div className="spinner-border text-secondary" />
+            </div>
+          ) : (
+            <div className={styles.timeline}>
+              <div className={styles.timelineLine} data-timeline-line />
 
-            {reversed.map((exp, i) => (
-              <div
-                key={exp.id}
-                className={`${styles.item} ${i % 2 === 0 ? styles.itemLeft : styles.itemRight}`}
-                data-exp-item
-              >
-                <div className={styles.dot}>
-                  <span className="material-symbols-outlined">{typeIcon[exp.type]}</span>
+              {reversed.map((exp, i) => (
+                <div
+                  key={exp.id}
+                  className={`${styles.item} ${i % 2 === 0 ? styles.itemLeft : styles.itemRight}`}
+                  data-exp-item
+                >
+                  <div className={styles.dot}>
+                    <span className="material-symbols-outlined">{typeIcon[exp.type ?? 'other']}</span>
+                  </div>
+
+                  <article className={`${styles.card} ${styles[`type_${exp.type ?? 'other'}`]}`}>
+                    <header className={styles.cardHeader}>
+                      <div className={styles.cardMeta}>
+                        <span className={`${styles.typeBadge} ${styles[`badge_${exp.type ?? 'other'}`]}`}>
+                          {typeLabel[exp.type ?? 'other']}
+                        </span>
+                        <span className={styles.dates}>
+                          {formatRange(exp.startDate, exp.endDate)}
+                        </span>
+                      </div>
+                      <h2 className={styles.company}>{exp.company}</h2>
+                      <p className={styles.role}>{exp.role}</p>
+                    </header>
+
+                    <p className={styles.description}>{exp.description}</p>
+
+                    <footer className={styles.cardFooter}>
+                      <span className="material-symbols-outlined" style={{ fontSize: '0.95rem', opacity: 0.5 }}>
+                        location_on
+                      </span>
+                      <span className={styles.location}>{exp.location}</span>
+                    </footer>
+                  </article>
                 </div>
-
-                <article className={`${styles.card} ${styles[`type_${exp.type}`]}`}>
-                  <header className={styles.cardHeader}>
-                    <div className={styles.cardMeta}>
-                      <span className={`${styles.typeBadge} ${styles[`badge_${exp.type}`]}`}>
-                        {typeLabel[exp.type]}
-                      </span>
-                      <span className={styles.dates}>
-                        {formatRange(exp.startDate, exp.endDate)}
-                      </span>
-                    </div>
-                    <h2 className={styles.company}>{exp.company}</h2>
-                    <p className={styles.role}>{exp.role}</p>
-                  </header>
-
-                  <p className={styles.description}>{exp.description}</p>
-
-                  <footer className={styles.cardFooter}>
-                    <span className="material-symbols-outlined" style={{ fontSize: '0.95rem', opacity: 0.5 }}>
-                      location_on
-                    </span>
-                    <span className={styles.location}>{exp.location}</span>
-                  </footer>
-                </article>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </main>
 

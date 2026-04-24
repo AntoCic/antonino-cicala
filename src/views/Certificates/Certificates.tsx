@@ -1,73 +1,36 @@
-import { useLayoutEffect, useRef } from 'react';
+import { useEffect, useLayoutEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useAppDispatch, useAppSelector } from '../../store';
+import { getAllCertificates } from '../../db/certificates/certificateRepo';
+import { setCertificates, setCertificateLoading } from '../../db/certificates/certificateSlice';
 import styles from './Certificates.module.css';
 
 gsap.registerPlugin(ScrollTrigger);
 
-interface Certificate {
-  id: string;
-  name: string;
-  issuer: string;
-  image: string;
-  priority: number;
-  description: string;
-}
-
-const certificates: Certificate[] = [
-  {
-    id: 'boolean',
-    name: 'Boolean Bootcamp',
-    issuer: 'Boolean',
-    image: '/img/certificati/boolean.png',
-    priority: 1,
-    description: 'Certificato di completamento del bootcamp intensivo full stack — oltre 600 ore di formazione su HTML, CSS, JavaScript, PHP, Laravel, Vue e React.',
-  },
-  {
-    id: 'react',
-    name: 'React Certification',
-    issuer: 'React',
-    image: '/img/certificati/React.png',
-    priority: 2,
-    description: 'Certificazione sulle competenze avanzate di React: hooks, stato globale, ottimizzazione delle performance e architettura di componenti.',
-  },
-  {
-    id: 'hackathon',
-    name: 'Hackathon Codemotion',
-    issuer: 'Codemotion',
-    image: '/img/certificati/hackathon-codemotion.png',
-    priority: 3,
-    description: 'Partecipazione e riconoscimento all\'hackathon Codemotion — sviluppo di un MVP in 24 ore in team multidisciplinare.',
-  },
-  {
-    id: 'canva',
-    name: 'Canva Design',
-    issuer: 'Canva',
-    image: '/img/certificati/canva.jpg',
-    priority: 4,
-    description: 'Certificazione sulle competenze di design grafico e comunicazione visiva con Canva.',
-  },
-].sort((a, b) => a.priority - b.priority);
-
 export default function Certificates() {
+  const dispatch = useAppDispatch();
+  const { certificates, loading } = useAppSelector((s) => s.certificate);
   const sectionRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (certificates.length > 0) return;
+    dispatch(setCertificateLoading(true));
+    getAllCertificates().then((data) => dispatch(setCertificates(data)));
+  }, [dispatch, certificates.length]);
 
   useLayoutEffect(() => {
     const section = sectionRef.current;
     const track = trackRef.current;
-    if (!section || !track) return;
+    if (!section || !track || certificates.length === 0) return;
 
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     const ctx = gsap.context(() => {
       gsap.from('[data-cert-header]', {
-        y: 40,
-        opacity: 0,
-        duration: 0.7,
-        ease: 'power2.out',
-        delay: 0.15,
+        y: 40, opacity: 0, duration: 0.7, ease: 'power2.out', delay: 0.15,
       });
 
       if (prefersReducedMotion) return;
@@ -87,10 +50,12 @@ export default function Certificates() {
           anticipatePin: 1,
         },
       });
+
+      ScrollTrigger.refresh();
     }, sectionRef);
 
     return () => ctx.revert();
-  }, []);
+  }, [certificates.length]);
 
   return (
     <div className={styles.root}>
@@ -115,36 +80,54 @@ export default function Certificates() {
           </div>
         </div>
 
-        <div className={styles.trackOuter}>
-          <div ref={trackRef} className={styles.track}>
-            {certificates.map((cert, i) => (
-              <article key={cert.id} className={`${styles.card} ${i === 0 ? styles.cardFirst : ''}`}>
-                {cert.priority === 1 && (
-                  <span className={styles.badge}>
-                    <span className="material-symbols-outlined" style={{ fontSize: '0.8rem' }}>workspace_premium</span>
-                    Principale
-                  </span>
-                )}
-                <div className={styles.cardImgWrapper}>
-                  <img
-                    src={cert.image}
-                    alt={cert.name}
-                    className={styles.cardImg}
-                    loading="lazy"
-                  />
-                </div>
-                <div className={styles.cardBody}>
-                  <div className={styles.issuerRow}>
-                    <span className={styles.priority}>#{cert.priority}</span>
-                    <span className={styles.issuer}>{cert.issuer}</span>
-                  </div>
-                  <h2 className={styles.cardTitle}>{cert.name}</h2>
-                  <p className={styles.cardDesc}>{cert.description}</p>
-                </div>
-              </article>
-            ))}
+        {loading ? (
+          <div className="text-center py-5">
+            <div className="spinner-border text-secondary" />
           </div>
-        </div>
+        ) : (
+          <div className={styles.trackOuter}>
+            <div ref={trackRef} className={styles.track}>
+              {certificates.map((cert, i) => (
+                <article key={cert.id} className={`${styles.card} ${i === 0 ? styles.cardFirst : ''}`}>
+                  {cert.order === 0 && (
+                    <span className={styles.badge}>
+                      <span className="material-symbols-outlined" style={{ fontSize: '0.8rem' }}>workspace_premium</span>
+                      Principale
+                    </span>
+                  )}
+                  <div className={styles.cardImgWrapper}>
+                    <img
+                      src={`/img/certificati/${cert.image}`}
+                      alt={cert.name}
+                      className={styles.cardImg}
+                      loading="lazy"
+                    />
+                  </div>
+                  <div className={styles.cardBody}>
+                    <div className={styles.issuerRow}>
+                      <span className={styles.priority}>#{cert.order + 1}</span>
+                      <span className={styles.issuer}>{cert.issuer}</span>
+                    </div>
+                    <h2 className={styles.cardTitle}>{cert.name}</h2>
+                    <p className={styles.cardDesc}>{cert.description}</p>
+                    {cert.url && (
+                      <a
+                        href={cert.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={styles.cardLink}
+                        style={{ marginTop: '0.75rem', display: 'inline-flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.82rem' }}
+                      >
+                        <span className="material-symbols-outlined" style={{ fontSize: '0.9rem' }}>open_in_new</span>
+                        Vedi certificato
+                      </a>
+                    )}
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        )}
       </section>
 
       <footer className={styles.footer}>

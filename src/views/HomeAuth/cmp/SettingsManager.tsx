@@ -11,6 +11,7 @@ export default function SettingsManager() {
 
   const [description, setDescription] = useState('');
   const [aiChatEnabled, setAiChatEnabled] = useState(false);
+  const [behavioralRules, setBehavioralRules] = useState('');
   const [loaded, setLoaded] = useState(false);
   const [saving, setSaving] = useState(false);
 
@@ -19,6 +20,7 @@ export default function SettingsManager() {
       dispatch(setAppSettings(data));
       setDescription(data?.description ?? '');
       setAiChatEnabled(data?.aiChatEnabled ?? false);
+      setBehavioralRules(data?.behavioralRules ?? '');
       setLoaded(true);
     });
   }, [dispatch]);
@@ -27,14 +29,15 @@ export default function SettingsManager() {
     if (settings && loaded) {
       setDescription(settings.description ?? '');
       setAiChatEnabled(settings.aiChatEnabled ?? false);
+      setBehavioralRules(settings.behavioralRules ?? '');
     }
   }, [settings, loaded]);
 
   const handleSave = async () => {
     setSaving(true);
     try {
-      await updateAppSettings({ description, aiChatEnabled });
-      dispatch(setAppSettings({ description, aiChatEnabled }));
+      await updateAppSettings({ description, aiChatEnabled, behavioralRules });
+      dispatch(setAppSettings({ description, aiChatEnabled, behavioralRules }));
       toast.success('Impostazioni salvate');
     } catch {
       toast.error('Errore durante il salvataggio');
@@ -86,6 +89,20 @@ export default function SettingsManager() {
               </span>
             </label>
           </div>
+        </div>
+      </div>
+
+      <div className="mb-4">
+        <label className="form-label fw-semibold">Regole di comportamento AI</label>
+        <textarea
+          className="form-control"
+          rows={6}
+          value={behavioralRules}
+          onChange={(e) => setBehavioralRules(e.target.value)}
+          placeholder="Definisci le regole di comportamento dell'AI: tono, limiti, argomenti da evitare, formato delle risposte…"
+        />
+        <div className="form-text">
+          Istruzioni comportamentali per l'AI: cosa può/non può fare, come rispondere, stile comunicativo.
         </div>
       </div>
 

@@ -7,9 +7,13 @@ import { useAppDispatch } from '../../store';
 import { hubLog } from '../../api/hubLog';
 import FaqManager from './cmp/FaqManager';
 import SettingsManager from './cmp/SettingsManager';
+import SkillsManager from './cmp/SkillsManager';
+import ProjectsManager from './cmp/ProjectsManager';
+import ExperiencesManager from './cmp/ExperiencesManager';
+import CertificatesManager from './cmp/CertificatesManager';
 import styles from './HomeAuth.module.css';
 
-type Tab = 'faq' | 'settings';
+type Tab = 'faq' | 'skills' | 'projects' | 'experiences' | 'certificates' | 'settings';
 
 const HomeAuth = () => {
   const { user } = useAuth();
@@ -117,6 +121,50 @@ const HomeAuth = () => {
           </li>
           <li className="nav-item">
             <button
+              className={`nav-link ${activeTab === 'skills' ? 'active' : ''}`}
+              onClick={() => setActiveTab('skills')}
+            >
+              <span className="material-symbols-outlined me-1" style={{ fontSize: 18, verticalAlign: 'middle' }}>
+                code
+              </span>
+              Skill
+            </button>
+          </li>
+          <li className="nav-item">
+            <button
+              className={`nav-link ${activeTab === 'projects' ? 'active' : ''}`}
+              onClick={() => setActiveTab('projects')}
+            >
+              <span className="material-symbols-outlined me-1" style={{ fontSize: 18, verticalAlign: 'middle' }}>
+                folder
+              </span>
+              Progetti
+            </button>
+          </li>
+          <li className="nav-item">
+            <button
+              className={`nav-link ${activeTab === 'experiences' ? 'active' : ''}`}
+              onClick={() => setActiveTab('experiences')}
+            >
+              <span className="material-symbols-outlined me-1" style={{ fontSize: 18, verticalAlign: 'middle' }}>
+                work
+              </span>
+              Esperienze
+            </button>
+          </li>
+          <li className="nav-item">
+            <button
+              className={`nav-link ${activeTab === 'certificates' ? 'active' : ''}`}
+              onClick={() => setActiveTab('certificates')}
+            >
+              <span className="material-symbols-outlined me-1" style={{ fontSize: 18, verticalAlign: 'middle' }}>
+                workspace_premium
+              </span>
+              Certificati
+            </button>
+          </li>
+          <li className="nav-item">
+            <button
               className={`nav-link ${activeTab === 'settings' ? 'active' : ''}`}
               onClick={() => setActiveTab('settings')}
             >
@@ -130,6 +178,10 @@ const HomeAuth = () => {
 
         <div className={styles.content}>
           {activeTab === 'faq' && <FaqManager />}
+          {activeTab === 'skills' && <SkillsManager />}
+          {activeTab === 'projects' && <ProjectsManager />}
+          {activeTab === 'experiences' && <ExperiencesManager />}
+          {activeTab === 'certificates' && <CertificatesManager />}
           {activeTab === 'settings' && <SettingsManager />}
         </div>
       </div>

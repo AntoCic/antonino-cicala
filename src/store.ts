@@ -4,12 +4,20 @@ import type { TypedUseSelectorHook } from 'react-redux';
 import authReducer from './db/auth/authSlice';
 import faqReducer from './db/faq/faqSlice';
 import appSettingsReducer from './db/appSettings/appSettingsSlice';
+import skillReducer from './db/skills/skillSlice';
+import projectReducer from './db/projects/projectSlice';
+import experienceReducer from './db/experiences/experienceSlice';
+import certificateReducer from './db/certificates/certificateSlice';
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
     faq: faqReducer,
     appSettings: appSettingsReducer,
+    skill: skillReducer,
+    project: projectReducer,
+    experience: experienceReducer,
+    certificate: certificateReducer,
   },
 });
 

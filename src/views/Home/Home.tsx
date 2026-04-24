@@ -57,27 +57,6 @@ export default function Home() {
           1.1,
         );
 
-      gsap.from('[data-skills-header]', {
-        y: 40, opacity: 0, duration: 0.7, ease: 'power2.out',
-        scrollTrigger: { trigger: '[data-skills-header]', start: 'top 82%', once: true },
-      });
-
-      gsap.utils.toArray<HTMLElement>('[data-skills-category]').forEach((el) => {
-        gsap.from(el, {
-          y: 30, opacity: 0, duration: 0.6, ease: 'power2.out',
-          scrollTrigger: { trigger: el, start: 'top 85%', once: true },
-        });
-      });
-
-      gsap.utils.toArray<HTMLElement>('[data-skills-row]').forEach((row) => {
-        gsap.from(row.querySelectorAll('[data-skill-chip]'), {
-          scale: 0.82, opacity: 0, duration: 0.45,
-          stagger: { each: 0.045, from: 'start' },
-          ease: 'back.out(1.4)',
-          scrollTrigger: { trigger: row, start: 'top 88%', once: true },
-        });
-      });
-
       gsap.from('[data-contact-content]', {
         y: 50, opacity: 0, duration: 0.8, ease: 'power2.out',
         scrollTrigger: { trigger: '[data-contact-content]', start: 'top 80%', once: true },

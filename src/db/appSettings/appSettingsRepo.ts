@@ -11,6 +11,7 @@ export async function getAppSettings(): Promise<AppSettings | null> {
   return {
     description: data.description ?? '',
     aiChatEnabled: data.aiChatEnabled ?? false,
+    behavioralRules: data.behavioralRules ?? '',
   };
 }
 
