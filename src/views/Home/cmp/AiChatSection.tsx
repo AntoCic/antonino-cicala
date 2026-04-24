@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { askAi } from '../../../api/aiChat';
+import { askAiStream } from '../../../api/aiChat';
 import styles from './AiChatSection.module.css';
 
 const SUGGESTED = [
@@ -34,14 +34,30 @@ export default function AiChatSection() {
     setThinking(true);
     scrollToBottom();
 
+    // Aggiunge subito un messaggio bot vuoto che verrà riempito chunk per chunk
+    setMessages((m) => [...m, { from: 'bot', text: '' }]);
+
     try {
-      const answer = await askAi(text.trim());
-      setMessages((m) => [...m, { from: 'bot', text: answer }]);
+      await askAiStream(text.trim(), (chunk) => {
+        setMessages((m) => {
+          const updated = [...m];
+          updated[updated.length - 1] = {
+            from: 'bot',
+            text: updated[updated.length - 1].text + chunk,
+          };
+          return updated;
+        });
+        scrollToBottom();
+      });
     } catch {
-      setMessages((m) => [
-        ...m,
-        { from: 'bot', text: 'Si è verificato un errore. Riprova tra qualche istante.' },
-      ]);
+      setMessages((m) => {
+        const updated = [...m];
+        updated[updated.length - 1] = {
+          from: 'bot',
+          text: 'Si è verificato un errore. Riprova tra qualche istante.',
+        };
+        return updated;
+      });
     } finally {
       setThinking(false);
       scrollToBottom();
@@ -77,18 +93,17 @@ export default function AiChatSection() {
                 key={i}
                 className={`${styles.msg} ${m.from === 'user' ? styles.msgUser : styles.msgBot}`}
               >
-                <span className={styles.msgText}>{m.text}</span>
+                {m.from === 'bot' && m.text === '' && thinking && i === messages.length - 1 ? (
+                  <span className={styles.typing}>
+                    <span />
+                    <span />
+                    <span />
+                  </span>
+                ) : (
+                  <span className={styles.msgText}>{m.text}</span>
+                )}
               </div>
             ))}
-            {thinking && (
-              <div className={`${styles.msg} ${styles.msgBot}`}>
-                <span className={styles.typing}>
-                  <span />
-                  <span />
-                  <span />
-                </span>
-              </div>
-            )}
           </div>
 
           <div className={styles.suggested}>

@@ -10,3 +10,4 @@ setGlobalOptions({
 
 export { logEvent } from './log/logFunction.js';
 export { chatAsk } from './ai/chatFunction.js';
+export { chatAskStream } from './ai/chatAskStream.js';
