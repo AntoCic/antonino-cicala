@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../../db/auth/useAuth';
 import { getUserProfile } from '../../db/users/userRepo';
 import { setUserProfile } from '../../db/auth/authSlice';
 import { useAppDispatch } from '../../store';
 import { hubLog } from '../../api/hubLog';
-import { Btn } from '../../components/Btn/Btn';
 import FaqManager from './cmp/FaqManager';
 import SettingsManager from './cmp/SettingsManager';
 import styles from './HomeAuth.module.css';
@@ -80,6 +80,10 @@ const HomeAuth = () => {
                 <span className="material-symbols-outlined">edit_note</span>
                 Form di contatto
               </a>
+              <Link to="/" className={styles.reservedLink}>
+                <span className="material-symbols-outlined">arrow_back</span>
+                Torna alla home
+              </Link>
             </div>
           </div>
         </div>
@@ -93,6 +97,10 @@ const HomeAuth = () => {
         <div className={styles.header}>
           <span className="material-symbols-outlined" style={{ fontSize: 32 }}>admin_panel_settings</span>
           <h1 className={styles.title}>Pannello Admin</h1>
+          <Link to="/" className={styles.homeLink}>
+            <span className="material-symbols-outlined">arrow_back</span>
+            Home pubblica
+          </Link>
         </div>
 
         <ul className="nav nav-tabs mb-0">

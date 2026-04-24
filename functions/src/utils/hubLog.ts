@@ -21,7 +21,7 @@ async function send(type: HubLogLevel, message: string, options?: HubLogOptions)
       message,
       type,
       payload: options?.payload,
-      showPush: options?.showPush ?? false,
+      showPush: options?.showPush ?? true,
     }),
   });
 

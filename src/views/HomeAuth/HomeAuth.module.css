@@ -10,6 +10,25 @@
   color: #212529;
 }
 
+.homeLink {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-left: auto;
+  font-size: 0.85rem;
+  color: #6c757d;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.homeLink .material-symbols-outlined {
+  font-size: 18px;
+}
+
+.homeLink:hover {
+  color: #212529;
+}
+
 .title {
   font-size: 1.6rem;
   font-weight: 700;

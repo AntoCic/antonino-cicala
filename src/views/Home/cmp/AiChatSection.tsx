@@ -1,41 +1,51 @@
 import { useRef, useState } from 'react';
+import { askAi } from '../../../api/aiChat';
 import styles from './AiChatSection.module.css';
 
 const SUGGESTED = [
   'Che tecnologie conosci?',
-  'Hai esperienza con Firebase?',
-  'Lavori in team?',
-  'Hai fatto progetti freelance?',
+  'Saresti in grado di creare il mio sito?',
+  'Sapresti implementare chat AI?',
 ];
 
 type Message = { from: 'user' | 'bot'; text: string };
-
-const BOT_REPLY = 'Questa funzionalità non è ancora implementata — sono in addestramento! Per ora puoi contattare Antonino direttamente oppure sfogliare i suoi progetti.';
 
 export default function AiChatSection() {
   const [messages, setMessages] = useState<Message[]>([
     {
       from: 'bot',
-      text: 'Ciao! Sono l\'assistente AI di Antonino, addestrato su una serie di FAQ sulle sue competenze e progetti. Prova a farmi una domanda!',
+      text: "Ciao! Sono l'assistente AI di Antonino, addestrato sulle sue FAQ, competenze ed esperienze. Prova a farmi una domanda!",
     },
   ]);
   const [input, setInput] = useState('');
   const [thinking, setThinking] = useState(false);
   const messagesRef = useRef<HTMLDivElement>(null);
 
-  const send = (text: string) => {
+  const scrollToBottom = () => {
+    setTimeout(() => {
+      messagesRef.current?.scrollTo({ top: messagesRef.current.scrollHeight, behavior: 'smooth' });
+    }, 50);
+  };
+
+  const send = async (text: string) => {
     if (!text.trim() || thinking) return;
-    const userMsg: Message = { from: 'user', text: text.trim() };
-    setMessages((m) => [...m, userMsg]);
+    setMessages((m) => [...m, { from: 'user', text: text.trim() }]);
     setInput('');
     setThinking(true);
-    setTimeout(() => {
-      setMessages((m) => [...m, { from: 'bot', text: BOT_REPLY }]);
+    scrollToBottom();
+
+    try {
+      const answer = await askAi(text.trim());
+      setMessages((m) => [...m, { from: 'bot', text: answer }]);
+    } catch {
+      setMessages((m) => [
+        ...m,
+        { from: 'bot', text: 'Si è verificato un errore. Riprova tra qualche istante.' },
+      ]);
+    } finally {
       setThinking(false);
-      setTimeout(() => {
-        messagesRef.current?.scrollTo({ top: messagesRef.current.scrollHeight, behavior: 'smooth' });
-      }, 50);
-    }, 1100);
+      scrollToBottom();
+    }
   };
 
   return (
@@ -47,11 +57,6 @@ export default function AiChatSection() {
             AI Assistant — beta
           </span>
           <h2 className={styles.title}>Hai domande sulle mie competenze?</h2>
-          <p className={styles.sub}>
-            Prova a chiedere all'assistente — addestrato su FAQ delle mie skill, esperienze e progetti.
-            <br />
-            <span className={styles.hint}>Puoi scrivere qualsiasi domanda o usare i suggerimenti.</span>
-          </p>
         </div>
 
         <div className={styles.chatBox}>

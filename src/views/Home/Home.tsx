@@ -163,7 +163,7 @@ export default function Home() {
               <img src="/img/contact_ico/github.svg" alt="GitHub" width={18} height={18} />
             </a>
             <Link to={user ? '/home' : '/login'} aria-label="Admin">
-              <span className="material-symbols-outlined" style={{ fontSize: 18, display: 'block', color: '#fff' }}>lock</span>
+              <span className="material-symbols-outlined" style={{ fontSize: 18, color: '#fff' }}>lock</span>
             </Link>
             <Link to="/experiences" className={styles.footerExpDot} aria-label="Esperienze lavorative" title="Esperienze lavorative" />
           </div>

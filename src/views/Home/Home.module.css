@@ -181,6 +181,7 @@
 .footerLinks a {
   display: flex;
   opacity: 0.6;
+  text-decoration: none;
   transition: opacity 0.2s ease;
 }
 
