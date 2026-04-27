@@ -16,8 +16,12 @@ import {
   updateExperienceInStore,
   removeExperienceFromStore,
 } from '../../../db/experiences/experienceSlice';
+import { getAllSkills } from '../../../db/skills/skillRepo';
+import { setSkills } from '../../../db/skills/skillSlice';
+import { SKILL_CATEGORIES } from '../../../db/skills/Skill';
 import type { Experience } from '../../../db/experiences/Experience';
 import styles from '../HomeAuth.module.css';
+
 
 function formatPeriod(start: string, end?: string): string {
   if (!start) return '';
@@ -32,6 +36,7 @@ function formatPeriod(start: string, end?: string): string {
 export default function ExperiencesManager() {
   const dispatch = useAppDispatch();
   const { experiences, loading } = useAppSelector((s) => s.experience);
+  const { skills } = useAppSelector((s) => s.skill);
 
   const [showModal, setShowModal] = useState(false);
   const [editing, setEditing] = useState<Experience | null>(null);
@@ -40,7 +45,7 @@ export default function ExperiencesManager() {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [description, setDescription] = useState('');
-  const [techRaw, setTechRaw] = useState('');
+  const [selectedTech, setSelectedTech] = useState<string[]>([]);
   const [location, setLocation] = useState('');
   const [order, setOrder] = useState(0);
   const [saving, setSaving] = useState(false);
@@ -56,6 +61,12 @@ export default function ExperiencesManager() {
       });
   }, [dispatch]);
 
+  useEffect(() => {
+    if (skills.length === 0) {
+      getAllSkills().then((data) => dispatch(setSkills(data)));
+    }
+  }, [dispatch, skills.length]);
+
   const openAdd = () => {
     setEditing(null);
     setCompany('');
@@ -63,7 +74,7 @@ export default function ExperiencesManager() {
     setStartDate('');
     setEndDate('');
     setDescription('');
-    setTechRaw('');
+    setSelectedTech([]);
     setLocation('');
     setOrder(experiences.length);
     setShowModal(true);
@@ -76,7 +87,7 @@ export default function ExperiencesManager() {
     setStartDate(exp.startDate);
     setEndDate(exp.endDate ?? '');
     setDescription(exp.description);
-    setTechRaw(exp.tech.join(', '));
+    setSelectedTech(exp.tech);
     setLocation(exp.location ?? '');
     setOrder(exp.order);
     setShowModal(true);
@@ -87,14 +98,20 @@ export default function ExperiencesManager() {
     setEditing(null);
   };
 
+  const toggleTech = (name: string) => {
+    setSelectedTech((prev) =>
+      prev.includes(name) ? prev.filter((t) => t !== name) : [...prev, name]
+    );
+  };
+
   const buildPayload = () => ({
     company: company.trim(),
     role: role.trim(),
     startDate: startDate.trim(),
     endDate: endDate.trim() || undefined,
     description: description.trim(),
-    tech: techRaw.split(',').map((t) => t.trim()).filter(Boolean),
-    location: location.trim() || undefined,
+    tech: selectedTech,
+    location: location || undefined,
     order,
   });
 
@@ -303,14 +320,44 @@ export default function ExperiencesManager() {
           </div>
           <div className="col-md-8">
             <label className="form-label fw-semibold">Tecnologie</label>
-            <input
-              type="text"
-              className="form-control"
-              value={techRaw}
-              onChange={(e) => setTechRaw(e.target.value)}
-              placeholder="es. React, TypeScript, Firebase"
-            />
-            <div className="form-text">Separate da virgola</div>
+            <div className="border rounded p-2" style={{ minHeight: 56 }}>
+              {SKILL_CATEGORIES.map((cat) => {
+                const catSkills = skills.filter((s) => s.category === cat);
+                if (catSkills.length === 0) return null;
+                return (
+                  <div key={cat} className="mb-2">
+                    <small
+                      className="text-muted text-uppercase fw-semibold d-block mb-1"
+                      style={{ fontSize: '0.65rem', letterSpacing: '0.05em' }}
+                    >
+                      {cat}
+                    </small>
+                    <div className="d-flex flex-wrap gap-1">
+                      {catSkills.map((skill) => {
+                        const active = selectedTech.includes(skill.name);
+                        return (
+                          <button
+                            key={skill.id}
+                            type="button"
+                            onClick={() => toggleTech(skill.name)}
+                            className={`btn btn-sm ${active ? 'btn-primary' : 'btn-outline-secondary'}`}
+                            style={{ fontSize: '0.75rem', padding: '2px 10px' }}
+                          >
+                            {skill.name}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              })}
+              {skills.length === 0 && (
+                <span className="text-muted" style={{ fontSize: '0.85rem' }}>Caricamento skill…</span>
+              )}
+            </div>
+            {selectedTech.length > 0 && (
+              <div className="form-text">{selectedTech.length} selezionate</div>
+            )}
           </div>
           <div className="col-md-4">
             <label className="form-label fw-semibold">Ordine</label>

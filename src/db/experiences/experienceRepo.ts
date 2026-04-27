@@ -4,6 +4,7 @@ import {
   addDoc,
   updateDoc,
   deleteDoc,
+  deleteField,
   doc,
   serverTimestamp,
   query,
@@ -32,7 +33,11 @@ export async function createExperience(data: ExperienceWrite): Promise<string> {
 }
 
 export async function updateExperience(id: string, data: Partial<ExperienceWrite>): Promise<void> {
-  await updateDoc(doc(db, 'experiences', id), { ...data, updatedAt: serverTimestamp() });
+  const update: Record<string, unknown> = { updatedAt: serverTimestamp() };
+  for (const [key, value] of Object.entries(data as Record<string, unknown>)) {
+    update[key] = value === undefined ? deleteField() : value;
+  }
+  await updateDoc(doc(db, 'experiences', id), update);
 }
 
 export async function deleteExperience(id: string): Promise<void> {

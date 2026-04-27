@@ -11,6 +11,7 @@ export default function SettingsManager() {
 
   const [description, setDescription] = useState('');
   const [aiChatEnabled, setAiChatEnabled] = useState(false);
+  const [chatNotifications, setChatNotifications] = useState(true);
   const [behavioralRules, setBehavioralRules] = useState('');
   const [loaded, setLoaded] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -20,6 +21,7 @@ export default function SettingsManager() {
       dispatch(setAppSettings(data));
       setDescription(data?.description ?? '');
       setAiChatEnabled(data?.aiChatEnabled ?? false);
+      setChatNotifications(data?.chatNotifications ?? true);
       setBehavioralRules(data?.behavioralRules ?? '');
       setLoaded(true);
     });
@@ -29,6 +31,7 @@ export default function SettingsManager() {
     if (settings && loaded) {
       setDescription(settings.description ?? '');
       setAiChatEnabled(settings.aiChatEnabled ?? false);
+      setChatNotifications(settings.chatNotifications ?? true);
       setBehavioralRules(settings.behavioralRules ?? '');
     }
   }, [settings, loaded]);
@@ -36,8 +39,8 @@ export default function SettingsManager() {
   const handleSave = async () => {
     setSaving(true);
     try {
-      await updateAppSettings({ description, aiChatEnabled, behavioralRules });
-      dispatch(setAppSettings({ description, aiChatEnabled, behavioralRules }));
+      await updateAppSettings({ description, aiChatEnabled, chatNotifications, behavioralRules });
+      dispatch(setAppSettings({ description, aiChatEnabled, chatNotifications, behavioralRules }));
       toast.success('Impostazioni salvate');
     } catch {
       toast.error('Errore durante il salvataggio');
@@ -72,8 +75,8 @@ export default function SettingsManager() {
 
       <div className="mb-4">
         <p className="form-label fw-semibold mb-3">Feature flags</p>
-        <div className="card border-0 bg-light rounded-3 p-3">
-          <div className="form-check form-switch">
+        <div className="card border-0 bg-light rounded-3 p-3 d-flex flex-column gap-3">
+          <div className="form-check form-switch mb-0">
             <input
               className="form-check-input"
               type="checkbox"
@@ -86,6 +89,22 @@ export default function SettingsManager() {
               <span className="fw-semibold">Chat AI</span>
               <span className="text-muted ms-2" style={{ fontSize: '0.85em' }}>
                 — se attiva, la sezione chat AI è visibile e utilizzabile nel sito pubblico
+              </span>
+            </label>
+          </div>
+          <div className="form-check form-switch mb-0">
+            <input
+              className="form-check-input"
+              type="checkbox"
+              role="switch"
+              id="chatNotifications"
+              checked={chatNotifications}
+              onChange={(e) => setChatNotifications(e.target.checked)}
+            />
+            <label className="form-check-label" htmlFor="chatNotifications">
+              <span className="fw-semibold">Notifiche chat</span>
+              <span className="text-muted ms-2" style={{ fontSize: '0.85em' }}>
+                — se attiva, ricevi una push notification per ogni messaggio inviato nella chat AI
               </span>
             </label>
           </div>

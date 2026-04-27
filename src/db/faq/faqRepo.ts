@@ -40,14 +40,19 @@ export async function deleteFaq(id: string): Promise<void> {
 }
 
 export async function seedFaqs(): Promise<void> {
-  const batch = writeBatch(db);
+  const existing = await getDocs(faqsCol());
+  const deleteBatch = writeBatch(db);
+  existing.docs.forEach((d) => deleteBatch.delete(d.ref));
+  await deleteBatch.commit();
+
+  const insertBatch = writeBatch(db);
   for (const item of FAQ_SEED_DATA) {
-    const newDoc = doc(faqsCol());
-    batch.set(newDoc, {
+    const ref = doc(faqsCol());
+    insertBatch.set(ref, {
       ...item,
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
     });
   }
-  await batch.commit();
+  await insertBatch.commit();
 }

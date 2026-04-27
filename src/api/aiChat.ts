@@ -8,6 +8,8 @@ export async function askAi(message: string): Promise<string> {
   return result.data.answer;
 }
 
+export type ChatHistoryMessage = { role: 'user' | 'model'; text: string };
+
 function getStreamUrl(): string {
   const projectId = app.options.projectId!;
   const region = 'europe-west1';
@@ -20,11 +22,13 @@ function getStreamUrl(): string {
 export async function askAiStream(
   message: string,
   onChunk: (chunk: string) => void,
+  onProjects?: (ids: string[]) => void,
+  history?: ChatHistoryMessage[],
 ): Promise<void> {
   const res = await fetch(getStreamUrl(), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ message }),
+    body: JSON.stringify({ message, history }),
   });
 
   if (!res.ok || !res.body) {
@@ -48,9 +52,10 @@ export async function askAiStream(
       const data = line.slice(6).trim();
       if (data === '[DONE]') return;
       try {
-        const parsed = JSON.parse(data) as { chunk?: string; error?: string };
+        const parsed = JSON.parse(data) as { chunk?: string; error?: string; projectIds?: string[] };
         if (parsed.error) throw new Error(parsed.error);
         if (parsed.chunk) onChunk(parsed.chunk);
+        if (parsed.projectIds) onProjects?.(parsed.projectIds);
       } catch (e) {
         if (e instanceof SyntaxError) continue;
         throw e;
