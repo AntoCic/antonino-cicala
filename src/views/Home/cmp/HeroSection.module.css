@@ -75,6 +75,31 @@
   margin: 0.6rem 0 0;
 }
 
+.aiWord {
+  display: inline-block;
+  background: linear-gradient(90deg, #a855f7 0%, #ec4899 30%, #f97316 55%, #a855f7 100%);
+  background-size: 250% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 700;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.08em;
+  letter-spacing: 0.05em;
+  animation: aiShimmer 2.6s linear infinite, aiGlow 2.6s ease-in-out infinite;
+}
+
+@keyframes aiShimmer {
+  0%   { background-position: 0% center; }
+  100% { background-position: 250% center; }
+}
+
+@keyframes aiGlow {
+  0%, 100% { filter: drop-shadow(0 0 7px rgba(168, 85, 247, 0.75)); }
+  45%       { filter: drop-shadow(0 0 16px rgba(236, 72, 153, 0.85)); }
+  75%       { filter: drop-shadow(0 0 13px rgba(249, 115, 22, 0.75)); }
+}
+
 .ctas {
   margin-top: 1.2rem;
 }

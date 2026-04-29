@@ -36,7 +36,7 @@ export default function HeroSection() {
                 Freelance */}
               </p>
               <p className={styles.tagline} data-hero-reveal>
-                Trasformo idee in prodotti digitali — web app, gestionali e integrazioni su misura.
+                Costruisco prodotti digitali e automatizzo flussi complessi con <span className={styles.aiWord}>AI</span> — perché il talento umano merita di concentrarsi su ciò che conta.
               </p>
               <div className={`d-flex gap-3 flex-wrap ${styles.ctas}`} data-hero-reveal>
                 <a href="/Antonino.Cicala.pdf" target="_blank" rel="noopener noreferrer">
