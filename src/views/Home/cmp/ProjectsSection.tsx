@@ -51,11 +51,8 @@ export default function ProjectsSection() {
           pin: true,
           scrub: 1.2,
           invalidateOnRefresh: true,
-          anticipatePin: 1,
         },
       });
-
-      ScrollTrigger.refresh();
     }, sectionRef);
 
     return () => ctx.revert();
