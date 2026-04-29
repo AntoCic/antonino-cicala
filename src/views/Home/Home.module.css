@@ -44,10 +44,15 @@
 }
 
 .overlayLens {
-  width: 320px;
-  height: 320px;
+  width: 300px;
+  height: 300px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.22) 0%, rgba(10, 201, 255, 0.12) 40%, transparent 70%);
+  background:
+    radial-gradient(circle, rgba(255, 255, 255, 0.55) 0%, rgba(10, 201, 255, 0.35) 22%, rgba(10, 228, 72, 0.15) 50%, transparent 70%);
+  box-shadow:
+    0 0 0 2px rgba(10, 201, 255, 0.4),
+    0 0 60px 20px rgba(10, 201, 255, 0.25),
+    0 0 120px 40px rgba(10, 228, 72, 0.1);
   transform-origin: center;
 }
 

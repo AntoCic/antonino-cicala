@@ -40,22 +40,55 @@ export default function Home() {
     const ctx = gsap.context(() => {
       const tl = gsap.timeline();
 
-      tl.fromTo(
-        '[data-intro-lens]',
-        { scale: 0.2, opacity: 0.6 },
-        { scale: 3.5, opacity: 0, duration: 1.1, ease: 'power2.out' },
-        0,
-      )
-        .to(
-          overlayRef.current,
-          { autoAlpha: 0, duration: 0.65, ease: 'power2.inOut' },
-          0.85,
+      tl
+        // Lens burst — rotates while expanding for a portal feel
+        .fromTo(
+          '[data-intro-lens]',
+          { scale: 0.1, opacity: 1, rotate: -20 },
+          { scale: 6, opacity: 0, rotate: 20, duration: 1.1, ease: 'power2.inOut' },
+          0,
         )
+        // Overlay fade
+        .to(overlayRef.current, { autoAlpha: 0, duration: 0.5, ease: 'power2.inOut' }, 0.85)
+        // Avatar — 3D Y-axis reveal with blur and spring
+        .from(
+          '[data-hero-avatar]',
+          {
+            scale: 0.3,
+            opacity: 0,
+            rotateY: -25,
+            filter: 'blur(14px)',
+            transformPerspective: 700,
+            duration: 0.78,
+            ease: 'back.out(1.6)',
+          },
+          1.0,
+        )
+        // Text elements — 3D fold-down (like a door opening toward the viewer)
         .from(
           '[data-hero-reveal]',
-          { y: 30, opacity: 0, duration: 0.6, stagger: 0.09, ease: 'power2.out' },
-          1.1,
+          {
+            transformPerspective: 1000,
+            rotateX: -80,
+            transformOrigin: '50% 0%',
+            opacity: 0,
+            duration: 0.62,
+            stagger: 0.1,
+            ease: 'power3.out',
+          },
+          1.12,
         );
+
+      // Gentle float on the avatar after entrance
+      tl.eventCallback('onComplete', () => {
+        gsap.to('[data-hero-avatar]', {
+          y: -10,
+          duration: 2.8,
+          ease: 'sine.inOut',
+          yoyo: true,
+          repeat: -1,
+        });
+      });
 
       gsap.from('[data-contact-content]', {
         y: 50, opacity: 0, duration: 0.8, ease: 'power2.out',

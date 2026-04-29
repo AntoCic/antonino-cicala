@@ -22,7 +22,7 @@ export default function HeroSection() {
                 src="/img/foto_profilo_no_bg.png"
                 alt="Antonino Cicala"
                 className={styles.avatar}
-                data-hero-reveal
+                data-hero-avatar
               />
               <p className={styles.kicker} data-hero-reveal>
                 Ciao, sono
