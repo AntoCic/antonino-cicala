@@ -6,6 +6,7 @@ import {
   deleteDoc,
   doc,
   serverTimestamp,
+  deleteField,
   query,
   orderBy,
   writeBatch,
@@ -23,8 +24,9 @@ export async function getAllProjects(): Promise<Project[]> {
 }
 
 export async function createProject(data: ProjectWrite): Promise<string> {
+  const clean = Object.fromEntries(Object.entries(data).filter(([, v]) => v !== undefined));
   const ref = await addDoc(projectsCol(), {
-    ...data,
+    ...clean,
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
   });
@@ -32,7 +34,10 @@ export async function createProject(data: ProjectWrite): Promise<string> {
 }
 
 export async function updateProject(id: string, data: Partial<ProjectWrite>): Promise<void> {
-  await updateDoc(doc(db, 'projects', id), { ...data, updatedAt: serverTimestamp() });
+  const payload = Object.fromEntries(
+    Object.entries(data).map(([k, v]) => [k, v === undefined ? deleteField() : v])
+  );
+  await updateDoc(doc(db, 'projects', id), { ...payload, updatedAt: serverTimestamp() });
 }
 
 export async function deleteProject(id: string): Promise<void> {

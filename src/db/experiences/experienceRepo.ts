@@ -24,8 +24,9 @@ export async function getAllExperiences(): Promise<Experience[]> {
 }
 
 export async function createExperience(data: ExperienceWrite): Promise<string> {
+  const clean = Object.fromEntries(Object.entries(data).filter(([, v]) => v !== undefined));
   const ref = await addDoc(experiencesCol(), {
-    ...data,
+    ...clean,
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
   });

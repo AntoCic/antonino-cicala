@@ -48,6 +48,7 @@ export default function ExperiencesManager() {
   const [selectedTech, setSelectedTech] = useState<string[]>([]);
   const [location, setLocation] = useState('');
   const [order, setOrder] = useState(0);
+  const [isCurrent, setIsCurrent] = useState(false);
   const [saving, setSaving] = useState(false);
   const [seeding, setSeeding] = useState(false);
 
@@ -73,6 +74,7 @@ export default function ExperiencesManager() {
     setRole('');
     setStartDate('');
     setEndDate('');
+    setIsCurrent(true);
     setDescription('');
     setSelectedTech([]);
     setLocation('');
@@ -86,6 +88,7 @@ export default function ExperiencesManager() {
     setRole(exp.role);
     setStartDate(exp.startDate);
     setEndDate(exp.endDate ?? '');
+    setIsCurrent(!exp.endDate);
     setDescription(exp.description);
     setSelectedTech(exp.tech);
     setLocation(exp.location ?? '');
@@ -108,7 +111,7 @@ export default function ExperiencesManager() {
     company: company.trim(),
     role: role.trim(),
     startDate: startDate.trim(),
-    endDate: endDate.trim() || undefined,
+    endDate: isCurrent ? undefined : (endDate.trim() || undefined),
     description: description.trim(),
     tech: selectedTech,
     location: location || undefined,
@@ -293,10 +296,25 @@ export default function ExperiencesManager() {
             <input
               type="month"
               className="form-control"
-              value={endDate}
+              value={isCurrent ? '' : endDate}
               onChange={(e) => setEndDate(e.target.value)}
+              disabled={isCurrent}
             />
-            <div className="form-text">Lascia vuoto se attuale</div>
+            <div className="form-check mt-1">
+              <input
+                className="form-check-input"
+                type="checkbox"
+                id="expIsCurrent"
+                checked={isCurrent}
+                onChange={(e) => {
+                  setIsCurrent(e.target.checked);
+                  if (e.target.checked) setEndDate('');
+                }}
+              />
+              <label className="form-check-label" htmlFor="expIsCurrent" style={{ fontSize: '0.85rem' }}>
+                In corso (Presente)
+              </label>
+            </div>
           </div>
           <div className="col-md-4">
             <label className="form-label fw-semibold">Luogo</label>

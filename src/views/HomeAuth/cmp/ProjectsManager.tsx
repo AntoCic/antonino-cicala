@@ -5,6 +5,9 @@ import { toast } from '../../../components/toast/toast';
 import { useAppDispatch, useAppSelector } from '../../../store';
 import { getAllProjects, createProject, updateProject, deleteProject, seedProjects } from '../../../db/projects/projectRepo';
 import { setProjects, setProjectLoading, updateProjectInStore, removeProjectFromStore } from '../../../db/projects/projectSlice';
+import { getAllSkills } from '../../../db/skills/skillRepo';
+import { setSkills } from '../../../db/skills/skillSlice';
+import { SKILL_CATEGORIES } from '../../../db/skills/Skill';
 import type { Project } from '../../../db/projects/Project';
 import { PROJECT_CATEGORIES } from '../../../db/projects/Project';
 import styles from '../HomeAuth.module.css';
@@ -17,12 +20,13 @@ const CATEGORY_BADGE: Record<string, string> = {
 export default function ProjectsManager() {
   const dispatch = useAppDispatch();
   const { projects, loading } = useAppSelector((s) => s.project);
+  const { skills } = useAppSelector((s) => s.skill);
 
   const [showModal, setShowModal] = useState(false);
   const [editing, setEditing] = useState<Project | null>(null);
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const [techRaw, setTechRaw] = useState('');
+  const [selectedTech, setSelectedTech] = useState<string[]>([]);
   const [image, setImage] = useState('');
   const [date, setDate] = useState('');
   const [demoUrl, setDemoUrl] = useState('');
@@ -43,11 +47,17 @@ export default function ProjectsManager() {
       });
   }, [dispatch]);
 
+  useEffect(() => {
+    if (skills.length === 0) {
+      getAllSkills().then((data) => dispatch(setSkills(data)));
+    }
+  }, [dispatch, skills.length]);
+
   const openAdd = () => {
     setEditing(null);
     setName('');
     setDescription('');
-    setTechRaw('');
+    setSelectedTech([]);
     setImage('');
     setDate('');
     setDemoUrl('');
@@ -62,7 +72,7 @@ export default function ProjectsManager() {
     setEditing(p);
     setName(p.name);
     setDescription(p.description);
-    setTechRaw(p.tech.join(', '));
+    setSelectedTech(p.tech);
     setImage(p.image);
     setDate(p.date);
     setDemoUrl(p.demoUrl ?? '');
@@ -78,10 +88,16 @@ export default function ProjectsManager() {
     setEditing(null);
   };
 
+  const toggleTech = (name: string) => {
+    setSelectedTech((prev) =>
+      prev.includes(name) ? prev.filter((t) => t !== name) : [...prev, name]
+    );
+  };
+
   const buildPayload = (): Omit<Project, 'id' | 'createdAt' | 'updatedAt'> => ({
     name: name.trim(),
     description: description.trim(),
-    tech: techRaw.split(',').map((t) => t.trim()).filter(Boolean),
+    tech: selectedTech,
     image: image.trim(),
     date: date.trim(),
     demoUrl: demoUrl.trim() || undefined,
@@ -263,14 +279,44 @@ export default function ProjectsManager() {
           </div>
           <div className="col-md-8">
             <label className="form-label fw-semibold">Tecnologie</label>
-            <input
-              type="text"
-              className="form-control"
-              value={techRaw}
-              onChange={(e) => setTechRaw(e.target.value)}
-              placeholder="es. React, TypeScript, Firebase"
-            />
-            <div className="form-text">Separate da virgola</div>
+            <div className="border rounded p-2" style={{ minHeight: 56 }}>
+              {SKILL_CATEGORIES.map((cat) => {
+                const catSkills = skills.filter((s) => s.category === cat);
+                if (catSkills.length === 0) return null;
+                return (
+                  <div key={cat} className="mb-2">
+                    <small
+                      className="text-muted text-uppercase fw-semibold d-block mb-1"
+                      style={{ fontSize: '0.65rem', letterSpacing: '0.05em' }}
+                    >
+                      {cat}
+                    </small>
+                    <div className="d-flex flex-wrap gap-1">
+                      {catSkills.map((skill) => {
+                        const active = selectedTech.includes(skill.name);
+                        return (
+                          <button
+                            key={skill.id}
+                            type="button"
+                            onClick={() => toggleTech(skill.name)}
+                            className={`btn btn-sm ${active ? 'btn-primary' : 'btn-outline-secondary'}`}
+                            style={{ fontSize: '0.75rem', padding: '2px 10px' }}
+                          >
+                            {skill.name}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              })}
+              {skills.length === 0 && (
+                <span className="text-muted" style={{ fontSize: '0.85rem' }}>Caricamento skill…</span>
+              )}
+            </div>
+            {selectedTech.length > 0 && (
+              <div className="form-text">{selectedTech.length} selezionate</div>
+            )}
           </div>
           <div className="col-md-4">
             <label className="form-label fw-semibold">Categoria</label>
